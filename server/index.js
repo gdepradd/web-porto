@@ -1,25 +1,29 @@
 require('dotenv').config()
 const express = require('express')
-const mongoose = require('mongoose') // <-- Baris ini yang tadi dicari komputer
+const mongoose = require('mongoose')
 const cors = require('cors')
+
+// 1. IMPORT ROUTES (Pastikan path/lokasi file benar)
+const projectRoutes = require('./routes/projectRoutes') // <--- CEK INI
 
 const app = express()
 const PORT = process.env.PORT || 5000
 
-// Middleware
 app.use(cors())
 app.use(express.json())
 
-// KONEKSI MONGODB
+// 2. KONEKSI DB
 mongoose.connect(process.env.MONGO_URI)
     .then(() => console.log("✅ Berhasil connect ke MongoDB!"))
     .catch((err) => console.log("❌ Gagal connect:", err))
 
-// Route Test dengan Cek Status DB (Kode yang tadi Anda coba)
+// 3. DAFTARKAN RUTE (PENTING!)
+// Taruh ini SEBELUM app.listen dan SETELAH middleware
+app.use('/api/projects', projectRoutes) // <--- CEK INI
+
+// Route Test Biasa (Halaman Depan)
 app.get('/', (req, res) => {
-    // Cek status koneksi (1 = Connected)
-    const status = mongoose.connection.readyState === 1 ? '✅ Terhubung' : '❌ Belum Terhubung';
-    res.send(`Server Backend Jalan! Status MongoDB: ${status}`);
+    res.send('Server Utama Jalan!')
 })
 
 app.listen(PORT, () => {
