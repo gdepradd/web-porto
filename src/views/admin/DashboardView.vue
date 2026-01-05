@@ -41,6 +41,9 @@ onMounted(() => {
     <nav class="bg-white shadow p-4 mb-8">
       <div class="max-w-6xl mx-auto flex justify-between items-center">
         <h1 class="text-xl font-bold text-gray-800">Admin Dashboard</h1>
+        <router-link to="/admin/profile" class="text-purple-600 font-bold hover:underline">
+          👤 Edit Profil Saya
+      </router-link>
         <router-link to="/" class="text-sm text-gray-500 hover:text-blue-600">
           &larr; Lihat Website
         </router-link>

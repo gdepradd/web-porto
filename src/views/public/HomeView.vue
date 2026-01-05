@@ -20,10 +20,29 @@ const fetchProjects = async () => {
     console.error("Gagal mengambil data:", error)
   }
 }
+const profile = ref({
+    name: 'Developer',
+    role: 'Creator',
+    description: 'Loading...',
+    image: 'https://placehold.co/200'
+})
 
+// Fungsi Ambil Profil
+const fetchProfile = async () => {
+    try {
+        const res = await axios.get('http://localhost:5000/api/profile')
+        // Pastikan datanya ada sebelum di-set (jika API baru dibuat)
+        if (res.data) {
+             profile.value = res.data
+        }
+    } catch (error) {
+        console.error("Gagal load profil", error)
+    }
+}
 // 3. Jalankan fungsi ini OTOMATIS saat halaman dibuka
 onMounted(() => {
   fetchProjects()
+  fetchProfile()
 })
 </script>
 
@@ -32,12 +51,22 @@ onMounted(() => {
     <Navbar />
 
     <header class="pt-32 pb-20 px-6 text-center bg-white">
+  
+      <img 
+        v-if="profile.image" 
+        :src="profile.image" 
+        alt="Profile" 
+        class="w-48 h-48 rounded-full mx-auto mb-6 object-cover shadow-lg border-4 border-blue-100"
+      >
+
       <h1 class="text-5xl font-bold text-gray-900 mb-6">
-        Halo, Saya <span class="text-blue-600">Developer</span>
+        Halo, Saya <span class="text-blue-600">{{ profile.name }}</span>
       </h1>
-      <p class="text-xl text-gray-600 max-w-2xl mx-auto mb-8">
-        Saya membangun solusi digital menggunakan teknologi web modern.
+      <p class="text-xl font-medium text-gray-800 mb-2">{{ profile.role }}</p>
+      <p class="text-gray-600 max-w-2xl mx-auto mb-8">
+        {{ profile.description }}
       </p>
+      
       <a href="#projects" class="inline-block px-8 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition shadow-lg">
         Lihat Karya Saya
       </a>
