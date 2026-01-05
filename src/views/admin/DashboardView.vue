@@ -77,6 +77,11 @@ onMounted(() => {
                 </div>
               </td>
               <td class="px-6 py-4 text-right space-x-2">
+                <router-link 
+                  :to="`/admin/edit/${item._id}`" 
+                  class="text-blue-600 hover:text-blue-900 font-bold mr-2">
+                  Edit
+                </router-link>
                 <button @click="deleteProject(item._id)" class="text-red-600 hover:text-red-900 font-bold">
                   Hapus
                 </button>

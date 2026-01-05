@@ -4,6 +4,7 @@ import HomeView from '../views/public/HomeView.vue'
 import LoginView from '../views/admin/LoginView.vue'
 import DashboardView from '../views/admin/DashboardView.vue'
 import ProjectAddView from '../views/admin/ProjectAddView.vue'
+import ProjectEditView from '../views/admin/ProjectEditView.vue'
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
     routes: [
@@ -28,6 +29,11 @@ const router = createRouter({
             path: '/admin/add',
             name: 'project-add',
             component: ProjectAddView
+        },
+        {
+            path: '/admin/edit/:id',
+            name: 'project-edit',
+            component: ProjectEditView
         }
     ]
 })
