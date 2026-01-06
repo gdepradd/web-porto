@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted,computed } from 'vue'
 import axios from 'axios'
 import Navbar from '../../components/public/Navbar.vue'
 const formatDate = (dateString) => {
@@ -9,6 +9,7 @@ const formatDate = (dateString) => {
 }
 // Data dari Backend
 const projects = ref([])
+const selectedCategory = ref('Semua')
 const profile = ref({
     name: 'Loading...',
     role: '',
@@ -45,7 +46,20 @@ const fetchProfile = async () => {
     if (res.data) profile.value = res.data
   } catch (error) { console.error(error) }
 }
+const categories = computed(() => {
+  // Ambil semua kategori dari project yang ada
+  const allCats = projects.value.map(p => p.category).filter(cat => cat)
+  // Hilangkan duplikat pakai Set, lalu tambahkan 'Semua' di depan
+  return ['Semua', ...new Set(allCats)]
+})
 
+// 2. LOGIKA FILTER PROJECT
+const filteredProjects = computed(() => {
+  if (selectedCategory.value === 'Semua') {
+    return projects.value
+  }
+  return projects.value.filter(project => project.category === selectedCategory.value)
+})
 onMounted(() => {
   fetchProjects()
   fetchProfile()
@@ -165,42 +179,60 @@ onMounted(() => {
     </div>
       </div>
     </section>
-
     <section id="portfolio" class="py-24 px-6 bg-gray-800">
-      <div class="max-w-6xl mx-auto">
-        <div class="flex items-center gap-2 mb-12">
-            <div class="h-1 w-10 bg-green-500"></div>
-            <h2 class="text-sm font-bold tracking-widest text-green-500 uppercase">Selected Works</h2>
-        </div>
+  <div class="max-w-6xl mx-auto">
+    
+    <div class="flex items-center gap-2 mb-8">
+        <div class="h-1 w-10 bg-green-500"></div>
+        <h2 class="text-sm font-bold tracking-widest text-green-500 uppercase">Selected Works</h2>
+    </div>
 
-        <div v-if="projects.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          <div v-for="item in projects" :key="item._id" class="group bg-gray-900 rounded-xl overflow-hidden hover:shadow-2xl hover:shadow-green-900/20 transition duration-300 border border-gray-700">
-            
-            <div class="relative overflow-hidden">
-                <img :src="item.image" :alt="item.title" class="w-full h-48 object-cover group-hover:scale-110 transition duration-500">
-                <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
-                    <span class="text-green-400 font-bold border border-green-400 px-4 py-2 rounded">View Project</span>
-                </div>
+    <div class="flex flex-wrap gap-4 mb-12 justify-center md:justify-start">
+        <button 
+            v-for="cat in categories" 
+            :key="cat"
+            @click="selectedCategory = cat"
+            class="px-6 py-2 rounded-full border transition text-sm font-bold"
+            :class="selectedCategory === cat 
+                ? 'bg-green-600 text-white border-green-600' 
+                : 'text-gray-400 border-gray-700 hover:border-green-500 hover:text-white'"
+        >
+            {{ cat }}
+        </button>
+    </div>
+
+    <div v-if="filteredProjects.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      
+      <div v-for="item in filteredProjects" :key="item._id" class="group bg-gray-900 rounded-xl overflow-hidden hover:shadow-2xl hover:shadow-green-900/20 transition duration-300 border border-gray-700 flex flex-col h-full">
+        
+        <div class="relative overflow-hidden h-48">
+            <img :src="item.image" :alt="item.title" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+            <div class="absolute top-2 right-2 bg-black/70 text-white text-xs px-2 py-1 rounded backdrop-blur-sm border border-gray-600">
+                {{ item.category }}
             </div>
-            
-            <div class="p-6">
-              <h3 class="text-xl font-bold text-white mb-2">{{ item.title }}</h3>
-              <p class="text-gray-400 text-sm mb-4 line-clamp-2">{{ item.description }}</p>
-              
-              <div class="flex flex-wrap gap-2">
-                <span v-for="tech in item.tech" :key="tech" class="px-2 py-1 bg-gray-800 text-green-400 text-xs rounded border border-gray-700">
-                  {{ tech }}
-                </span>
-              </div>
-            </div>
-          </div>
         </div>
         
-        <div v-else class="text-center text-gray-500 py-10">
-            Belum ada project yang ditampilkan.
+        <div class="p-6 flex-1 flex flex-col">
+          <h3 class="text-xl font-bold text-white mb-2">{{ item.title }}</h3>
+          <p class="text-gray-400 text-sm mb-4 line-clamp-2 flex-1">{{ item.description }}</p>
+          
+          <div class="flex flex-wrap gap-2 mt-auto">
+            <span v-for="tech in item.tech" :key="tech" class="px-2 py-1 bg-gray-800 text-green-400 text-xs rounded border border-gray-700">
+              {{ tech }}
+            </span>
+          </div>
         </div>
+
       </div>
-    </section>
+
+    </div>
+    
+    <div v-else class="text-center text-gray-500 py-10">
+        Tidak ada project di kategori "{{ selectedCategory }}".
+    </div>
+
+  </div>
+</section>
 
     <section id="contact" class="py-24 px-6 bg-gray-900 text-center relative overflow-hidden">
     <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-gray-900 via-green-500 to-gray-900"></div>

@@ -1,18 +1,11 @@
-// File: server/models/Project.js
 const mongoose = require('mongoose')
 
 const ProjectSchema = new mongoose.Schema({
-    title: {
-        type: String,
-        required: true
-    },
-    description: String,
+    title: { type: String, required: true },
+    description: { type: String, required: true },
     tech: [String],
     image: String,
-    createdAt: {
-        type: Date,
-        default: Date.now
-    }
+    category: { type: String, required: true } // <--- TAMBAHAN BARU
 })
 
 module.exports = mongoose.model('Project', ProjectSchema)

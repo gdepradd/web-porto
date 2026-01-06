@@ -9,7 +9,9 @@ const router = useRouter()
 const form = ref({
   title: '',
   description: '',
-  tech: ''
+  tech: '',
+  image:'',
+  category:''
 })
 
 // Variabel khusus untuk menampung file
@@ -29,7 +31,7 @@ const handleSubmit = async () => {
     const formData = new FormData()
     formData.append('title', form.value.title)
     formData.append('description', form.value.description)
-    
+    formData.append('category', form.value.category)
     // Tech backend mintanya Array, tapi FormData kirimnya string
     // Kita kirim satu per satu agar backend (Multer) menerimanya sebagai array/list,
     // ATAU kirim string lalu biarkan backend tidak memprosesnya (tapi tadi backend kita terima raw body).
@@ -83,7 +85,18 @@ const handleSubmit = async () => {
           <label class="block text-gray-700 font-bold mb-2">Deskripsi</label>
           <textarea v-model="form.description" rows="3" required class="w-full border p-2 rounded"></textarea>
         </div>
-
+        <div>
+          <label class="block text-gray-700 font-bold mb-2">Kategori Project</label>
+          <select v-model="form.category" required class="w-full border border-gray-300 rounded-lg px-4 py-2 bg-white">
+            <option value="" disabled>Pilih Kategori</option>
+            <option value="Web App">Data Engineering</option>
+            <option value="Mobile App">LLM</option>
+            <option value="Computer Vision">Computer Vision</option>
+            <option value="NLP">NLP</option>
+            <option value="IoT">IoT</option>
+            <option value="Data Analysis">Data Analysis</option>
+          </select>
+        </div>
         <div>
           <label class="block text-gray-700 font-bold mb-2">Teknologi (Pisahkan koma)</label>
           <input v-model="form.tech" type="text" required placeholder="Vue, Node" class="w-full border p-2 rounded">
