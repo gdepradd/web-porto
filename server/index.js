@@ -4,8 +4,10 @@ const mongoose = require('mongoose')
 const cors = require('cors')
 
 // 1. IMPORT ROUTES (Pastikan path/lokasi file benar)
-const projectRoutes = require('./routes/projectRoutes') // <--- CEK INI
+const projectRoutes = require('./routes/projectRoutes')
 const profileRoutes = require('./routes/profileRoutes')
+const skillRoutes = require('./routes/skillRoutes')
+const certificateRoutes = require('./routes/certificateRoutes')
 const app = express()
 const PORT = process.env.PORT || 5000
 const path = require('path')
@@ -14,6 +16,8 @@ app.use(cors())
 app.use(express.json())
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')))
 app.use('/api/profile', profileRoutes)
+app.use('/api/skills', skillRoutes)
+app.use('/api/certificates', certificateRoutes)
 // 2. KONEKSI DB
 mongoose.connect(process.env.MONGO_URI)
     .then(() => console.log("✅ Berhasil connect ke MongoDB!"))

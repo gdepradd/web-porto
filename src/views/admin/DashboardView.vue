@@ -47,6 +47,9 @@ onMounted(() => {
         <router-link to="/" class="text-sm text-gray-500 hover:text-blue-600">
           &larr; Lihat Website
         </router-link>
+        <router-link to="/admin/manage" class="text-green-600 font-bold hover:underline ml-4">
+              📂 Kelola Skill & Sertifikat
+        </router-link>
       </div>
     </nav>
 

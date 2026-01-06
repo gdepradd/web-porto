@@ -2,103 +2,261 @@
 import { ref, onMounted } from 'vue'
 import axios from 'axios'
 import Navbar from '../../components/public/Navbar.vue'
-
-// 1. Siapkan variabel kosong untuk menampung data
-const projects = ref([])
-
-// 2. Buat fungsi untuk ambil data dari Backend
-const fetchProjects = async () => {
-  try {
-    // Tembak API Backend kita
-    const response = await axios.get('http://localhost:5000/api/projects')
-    
-    // Masukkan hasil data ke variabel kita
-    projects.value = response.data
-    console.log("Data berhasil diambil:", projects.value)
-    
-  } catch (error) {
-    console.error("Gagal mengambil data:", error)
-  }
+const formatDate = (dateString) => {
+    if(!dateString) return 'Seumur Hidup'
+    const options = { year: 'numeric', month: 'short' }
+    return new Date(dateString).toLocaleDateString('id-ID', options)
 }
+// Data dari Backend
+const projects = ref([])
 const profile = ref({
-    name: 'Developer',
-    role: 'Creator',
-    description: 'Loading...',
-    image: 'https://placehold.co/200'
+    name: 'Loading...',
+    role: '',
+    description: '',
+    image: ''
 })
 
-// Fungsi Ambil Profil
-const fetchProfile = async () => {
+// Data Skill (Hardcode dulu sesuai referensi gambar)
+const skills = ref([])
+const certificates = ref([])
+const fetchSkills = async () => {
     try {
-        const res = await axios.get('http://localhost:5000/api/profile')
-        // Pastikan datanya ada sebelum di-set (jika API baru dibuat)
-        if (res.data) {
-             profile.value = res.data
-        }
-    } catch (error) {
-        console.error("Gagal load profil", error)
-    }
+        const res = await axios.get('http://localhost:5000/api/skills')
+        skills.value = res.data
+    } catch (e) { console.error(e) }
 }
-// 3. Jalankan fungsi ini OTOMATIS saat halaman dibuka
+
+const fetchCerts = async () => {
+    try {
+        const res = await axios.get('http://localhost:5000/api/certificates')
+        certificates.value = res.data
+    } catch (e) { console.error(e) }
+}
+const fetchProjects = async () => {
+  try {
+    const response = await axios.get('http://localhost:5000/api/projects')
+    projects.value = response.data
+  } catch (error) { console.error(error) }
+}
+
+const fetchProfile = async () => {
+  try {
+    const res = await axios.get('http://localhost:5000/api/profile')
+    if (res.data) profile.value = res.data
+  } catch (error) { console.error(error) }
+}
+
 onMounted(() => {
   fetchProjects()
   fetchProfile()
+  fetchSkills()
+  fetchCerts()
 })
 </script>
 
 <template>
-  <div class="min-h-screen bg-gray-50">
+  <div class="bg-gray-900 text-gray-100 min-h-screen font-sans selection:bg-green-500 selection:text-white">
     <Navbar />
 
-    <header class="pt-32 pb-20 px-6 text-center bg-white">
-  
-      <img 
-        v-if="profile.image" 
-        :src="profile.image" 
-        alt="Profile" 
-        class="w-48 h-48 rounded-full mx-auto mb-6 object-cover shadow-lg border-4 border-blue-100"
-      >
-
-      <h1 class="text-5xl font-bold text-gray-900 mb-6">
-        Halo, Saya <span class="text-blue-600">{{ profile.name }}</span>
-      </h1>
-      <p class="text-xl font-medium text-gray-800 mb-2">{{ profile.role }}</p>
-      <p class="text-gray-600 max-w-2xl mx-auto mb-8">
-        {{ profile.description }}
-      </p>
-      
-      <a href="#projects" class="inline-block px-8 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition shadow-lg">
-        Lihat Karya Saya
-      </a>
-    </header>
-
-    <section id="projects" class="py-20 px-6 max-w-6xl mx-auto">
-      <h2 class="text-3xl font-bold text-gray-800 mb-10 text-center">Project Terbaru</h2>
-      
-      <div v-if="projects.length === 0" class="text-center text-gray-500">
-        Sedang memuat data dari server...
-      </div>
-
-      <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+    <section id="home" class="h-screen flex flex-col justify-center px-6 max-w-6xl mx-auto pt-16">
+      <div class="space-y-4 animate-fade-in-up">
+        <h1 class="text-5xl md:text-7xl font-bold text-white tracking-tight">
+          {{ profile.name }}
+        </h1>
+        <p class="text-xl md:text-2xl text-gray-400">
+          I'm a passionate <span class="text-green-500 font-bold border-b-2 border-green-500">AI/ML Engineering</span>
+        </p>
         
-        <div v-for="item in projects" :key="item._id" class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition duration-300">
-          
-          <img :src="item.image" :alt="item.title" class="w-full h-48 object-cover">
-          
-          <div class="p-6">
-            <h3 class="text-xl font-bold text-gray-900 mb-2">{{ item.title }}</h3>
-            <p class="text-gray-600 text-sm mb-4">{{ item.description }}</p>
-            
-            <div class="flex flex-wrap gap-2">
-              <span v-for="tech in item.tech" :key="tech" class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">
-                {{ tech }}
-              </span>
-            </div>
-          </div>
-
-        </div>
-
       </div>
     </section>
+
+    <section id="about" class="py-24 px-6 bg-gray-900">
+      <div class="max-w-6xl mx-auto">
+        <div class="flex items-center gap-2 mb-12">
+            <div class="h-1 w-10 bg-green-500"></div>
+            <h2 class="text-sm font-bold tracking-widest text-green-500 uppercase">About Me</h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+          <div>
+             <img 
+                v-if="profile.image" 
+                :src="profile.image" 
+                alt="Profile" 
+                class="w-full h-[500px] object-cover rounded-lg grayscale hover:grayscale-0 transition duration-500 shadow-2xl"
+              >
+              <div v-else class="w-full h-[500px] bg-gray-800 rounded-lg animate-pulse"></div>
+          </div>
+
+          <div>
+            <h3 class="text-3xl font-bold text-white mb-6">Learn more about me</h3>
+            <p class="text-gray-400 leading-relaxed mb-6 whitespace-pre-line">
+              {{ profile.description }}
+            </p>
+            
+            <ul class="space-y-2 text-gray-300 mb-8">
+                <li class="flex items-center gap-2"><span class="text-green-500">▹</span> Natural Language Processing</li>
+                <li class="flex items-center gap-2"><span class="text-green-500">▹</span> Computer Vision</li>
+                <li class="flex items-center gap-2"><span class="text-green-500">▹</span> Large Language Model</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="mt-20">
+            <div class="flex items-center gap-2 mb-8">
+                <div class="h-1 w-10 bg-green-500"></div>
+                <h2 class="text-sm font-bold tracking-widest text-green-500 uppercase">My Skills</h2>
+            </div>
+            
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div v-for="item in skills" :key="item._id" 
+                     class="bg-gray-800 border border-gray-700 p-4 rounded hover:border-green-500 transition cursor-default text-center">
+                    <span class="font-bold text-gray-200">{{ item.name }}</span>
+                </div>
+                
+                <div v-if="skills.length === 0" class="col-span-4 text-gray-500 text-sm">Loading skills...</div>
+            </div>
+      </div>
+
+      <div class="mt-20">
+        <div class="flex items-center gap-2 mb-8">
+            <div class="h-1 w-10 bg-green-500"></div>
+            <h2 class="text-sm font-bold tracking-widest text-green-500 uppercase">Certifications</h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div v-for="cert in certificates" :key="cert._id" class="group relative bg-gray-800 rounded-lg overflow-hidden border border-gray-700 hover:shadow-lg hover:border-green-500 transition duration-300">
+        
+        <div class="absolute top-0 right-0 bg-red-600 text-white text-xs p-1 z-50" v-if="!cert.link">
+            No Link
+        </div>
+
+        <a 
+            v-if="cert.link" 
+            :href="cert.link" 
+            target="_blank" 
+            class="absolute inset-0 z-20 cursor-pointer"
+            title="Klik untuk melihat sertifikat"
+        ></a>
+
+        <div class="h-48 overflow-hidden bg-gray-700 relative">
+            <img :src="cert.image" :alt="cert.title" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+            
+            <div v-if="cert.link" class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center transition backdrop-blur-sm z-10 pointer-events-none">
+                <span class="text-white font-bold border-2 border-green-500 bg-green-500/20 px-4 py-2 rounded-full text-sm flex items-center gap-2">
+                    Buka Sertifikat ↗
+                </span>
+            </div>
+        </div>
+        
+        <div class="p-5">
+            <h3 class="font-bold text-white text-lg mb-1 leading-tight group-hover:text-green-400 transition">{{ cert.title }}</h3>
+            <p class="text-green-600 text-sm mb-4">{{ cert.issuer }}</p>
+            
+            <div class="flex justify-between items-center text-xs text-gray-500 border-t border-gray-700 pt-3">
+                <span>Issued: {{ formatDate(cert.issuedAt) }}</span>
+                <span v-if="cert.expiresAt">Exp: {{ formatDate(cert.expiresAt) }}</span>
+                <span v-else class="text-green-600">Lifetime</span>
+            </div>
+        </div>
+
+    </div>
+</div>
+    </div>
+      </div>
+    </section>
+
+    <section id="portfolio" class="py-24 px-6 bg-gray-800">
+      <div class="max-w-6xl mx-auto">
+        <div class="flex items-center gap-2 mb-12">
+            <div class="h-1 w-10 bg-green-500"></div>
+            <h2 class="text-sm font-bold tracking-widest text-green-500 uppercase">Selected Works</h2>
+        </div>
+
+        <div v-if="projects.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div v-for="item in projects" :key="item._id" class="group bg-gray-900 rounded-xl overflow-hidden hover:shadow-2xl hover:shadow-green-900/20 transition duration-300 border border-gray-700">
+            
+            <div class="relative overflow-hidden">
+                <img :src="item.image" :alt="item.title" class="w-full h-48 object-cover group-hover:scale-110 transition duration-500">
+                <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
+                    <span class="text-green-400 font-bold border border-green-400 px-4 py-2 rounded">View Project</span>
+                </div>
+            </div>
+            
+            <div class="p-6">
+              <h3 class="text-xl font-bold text-white mb-2">{{ item.title }}</h3>
+              <p class="text-gray-400 text-sm mb-4 line-clamp-2">{{ item.description }}</p>
+              
+              <div class="flex flex-wrap gap-2">
+                <span v-for="tech in item.tech" :key="tech" class="px-2 py-1 bg-gray-800 text-green-400 text-xs rounded border border-gray-700">
+                  {{ tech }}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div v-else class="text-center text-gray-500 py-10">
+            Belum ada project yang ditampilkan.
+        </div>
+      </div>
+    </section>
+
+    <section id="contact" class="py-24 px-6 bg-gray-900 text-center relative overflow-hidden">
+    <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-gray-900 via-green-500 to-gray-900"></div>
+
+    <div class="max-w-4xl mx-auto relative z-10">
+        <h2 class="text-4xl font-bold text-white mb-6">Contact Me</h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-16">
+            
+            <a 
+                v-if="profile.email" 
+                :href="`https://mail.google.com/mail/?view=cm&fs=1&to=${profile.email}`" 
+                target="_blank"
+                class="group bg-gray-800 p-6 rounded-xl border border-gray-700 hover:border-red-500 hover:bg-gray-800/80 transition flex flex-col items-center gap-4">
+                <div class="p-4 bg-gray-700 rounded-full group-hover:bg-red-500/20 group-hover:text-red-500 text-gray-300 transition">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                </div>
+                <span class="font-bold text-gray-300 group-hover:text-white">Email Me</span>
+            </a>
+
+            <a v-if="profile.linkedin" :href="profile.linkedin" target="_blank" class="group bg-gray-800 p-6 rounded-xl border border-gray-700 hover:border-blue-500 hover:bg-gray-800/80 transition flex flex-col items-center gap-4">
+                <div class="p-4 bg-gray-700 rounded-full group-hover:bg-blue-500/20 group-hover:text-blue-500 text-gray-300 transition">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></svg>
+                </div>
+                <span class="font-bold text-gray-300 group-hover:text-white">LinkedIn</span>
+            </a>
+
+            <a v-if="profile.github" :href="profile.github" target="_blank" class="group bg-gray-800 p-6 rounded-xl border border-gray-700 hover:border-white hover:bg-gray-800/80 transition flex flex-col items-center gap-4">
+                <div class="p-4 bg-gray-700 rounded-full group-hover:bg-white/10 group-hover:text-white text-gray-300 transition">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg>
+                </div>
+                <span class="font-bold text-gray-300 group-hover:text-white">GitHub</span>
+            </a>
+
+            <a v-if="profile.instagram" :href="profile.instagram" target="_blank" class="group bg-gray-800 p-6 rounded-xl border border-gray-700 hover:border-pink-500 hover:bg-gray-800/80 transition flex flex-col items-center gap-4">
+                <div class="p-4 bg-gray-700 rounded-full group-hover:bg-pink-500/20 group-hover:text-pink-500 text-gray-300 transition">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
+                </div>
+                <span class="font-bold text-gray-300 group-hover:text-white">Instagram</span>
+            </a>
+
+        </div>
+        
+        <footer class="mt-20 border-t border-gray-800 pt-8 text-gray-600 text-sm">
+            &copy; 2024 {{ profile.name }}. All rights reserved.<br>
+            Built with <span class="text-green-500 font-bold">MEVN Stack</span> (MongoDB, Express, Vue, Node).
+        </footer>
+    </div>
+</section>
+
   </div>
 </template>
+
+<style>
+/* Smooth Scroll untuk perpindahan section */
+html {
+  scroll-behavior: smooth;
+}
+</style>

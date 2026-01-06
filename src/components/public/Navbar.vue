@@ -1,18 +1,21 @@
 <template>
-  <nav class="bg-white shadow-md fixed w-full top-0 z-50">
-    <div class="max-w-6xl mx-auto px-4">
-      <div class="flex justify-between items-center py-4">
-        <div class="text-xl font-bold text-gray-800">
-          Portofolio<span class="text-blue-600">Saya</span>
+  <nav class="fixed w-full z-50 bg-gray-900/90 backdrop-blur-sm border-b border-gray-800">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="flex justify-between items-center h-16">
+        <a href="#home" class="text-xl font-bold text-white tracking-wider">
+          Portofolio<span class="text-green-500">.</span>
+        </a>
+
+        <div class="hidden md:flex space-x-8 text-sm font-medium text-gray-300">
+          <a href="#home" class="hover:text-green-400 transition">Home</a>
+          <a href="#about" class="hover:text-green-400 transition">About</a>
+          <a href="#portfolio" class="hover:text-green-400 transition">Portfolio</a>
+          <a href="#contact" class="hover:text-green-400 transition">Contact</a>
         </div>
         
-        <div class="space-x-6 text-gray-600">
-          <a href="#" class="hover:text-blue-600 transition">Home</a>
-          <a href="#projects" class="hover:text-blue-600 transition">Projects</a>
-          <router-link to="/login" class="px-4 py-2 bg-gray-800 text-white rounded hover:bg-gray-700 transition">
+        <router-link to="/login" class="px-4 py-2 text-xs font-bold text-gray-900 bg-white rounded hover:bg-gray-200 transition">
             Login
-          </router-link>
-        </div>
+        </router-link>
       </div>
     </div>
   </nav>

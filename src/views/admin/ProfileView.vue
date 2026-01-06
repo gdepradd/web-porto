@@ -5,7 +5,11 @@ import axios from 'axios'
 const form = ref({
   name: '',
   role: '',
-  description: ''
+  description: '',
+  github: '',       // Baru
+  linkedin: '',     // Baru
+  instagram: '',    // Baru
+  email: ''
 })
 const currentImage = ref('') // Untuk menampilkan foto yang sekarang
 const selectedFile = ref(null)
@@ -21,6 +25,10 @@ const fetchProfile = async () => {
         form.value.role = response.data.role
         form.value.description = response.data.description
         currentImage.value = response.data.image
+        form.value.github = response.data.github || ''
+        form.value.linkedin = response.data.linkedin || ''
+        form.value.instagram = response.data.instagram || ''
+        form.value.email = response.data.email || ''
     }
   } catch (error) {
     console.error("Gagal ambil profil:", error)
@@ -40,6 +48,10 @@ const handleSave = async () => {
   formData.append('name', form.value.name)
   formData.append('role', form.value.role)
   formData.append('description', form.value.description)
+  formData.append('github', form.value.github)
+  formData.append('linkedin', form.value.linkedin)
+  formData.append('instagram', form.value.instagram)
+  formData.append('email', form.value.email)
   if (selectedFile.value) {
     formData.append('image', selectedFile.value)
   }
@@ -88,6 +100,29 @@ onMounted(() => fetchProfile())
             <div>
                 <label class="block font-bold text-gray-700">Deskripsi Singkat</label>
                 <textarea v-model="form.description" rows="3" class="w-full border p-2 rounded"></textarea>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 border-t pt-4 border-gray-200">
+                <div class="col-span-2 text-gray-800 font-bold text-lg mb-2">Kontak & Sosial Media</div>
+
+                <div>
+                    <label class="block font-bold text-gray-600 text-sm">Email Address</label>
+                    <input v-model="form.email" type="email" placeholder="nama@email.com" class="w-full border p-2 rounded">
+                </div>
+
+                <div>
+                    <label class="block font-bold text-gray-600 text-sm">Link GitHub</label>
+                    <input v-model="form.github" type="url" placeholder="https://github.com/..." class="w-full border p-2 rounded">
+                </div>
+
+                <div>
+                    <label class="block font-bold text-gray-600 text-sm">Link LinkedIn</label>
+                    <input v-model="form.linkedin" type="url" placeholder="https://linkedin.com/in/..." class="w-full border p-2 rounded">
+                </div>
+
+                <div>
+                    <label class="block font-bold text-gray-600 text-sm">Link Instagram</label>
+                    <input v-model="form.instagram" type="url" placeholder="https://instagram.com/..." class="w-full border p-2 rounded">
+                </div>
             </div>
             <div>
                 <label class="block font-bold text-gray-700">Ganti Foto Profil</label>

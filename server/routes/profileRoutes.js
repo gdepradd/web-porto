@@ -44,7 +44,11 @@ router.post('/', upload.single('image'), async (req, res) => {
         let updateData = {
             name: req.body.name,
             role: req.body.role,
-            description: req.body.description
+            description: req.body.description,
+            github: req.body.github,
+            linkedin: req.body.linkedin,
+            instagram: req.body.instagram,
+            email: req.body.email
         }
 
         // Kalau ada gambar baru, update path gambarnya
