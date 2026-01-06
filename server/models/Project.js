@@ -5,7 +5,8 @@ const ProjectSchema = new mongoose.Schema({
     description: { type: String, required: true },
     tech: [String],
     image: String,
-    category: { type: String, required: true } // <--- TAMBAHAN BARU
+    category: { type: String, required: true },
+    github: { type: String, required: false } // <--- TAMBAHAN (Opsional)
 })
 
 module.exports = mongoose.model('Project', ProjectSchema)

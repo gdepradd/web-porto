@@ -11,7 +11,8 @@ const form = ref({
   description: '',
   tech: '',
   image:'',
-  category:''
+  category:'',
+  github:''
 })
 
 // Variabel khusus untuk menampung file
@@ -32,6 +33,7 @@ const handleSubmit = async () => {
     formData.append('title', form.value.title)
     formData.append('description', form.value.description)
     formData.append('category', form.value.category)
+    formData.append('github', form.value.github)
     // Tech backend mintanya Array, tapi FormData kirimnya string
     // Kita kirim satu per satu agar backend (Multer) menerimanya sebagai array/list,
     // ATAU kirim string lalu biarkan backend tidak memprosesnya (tapi tadi backend kita terima raw body).
@@ -89,13 +91,18 @@ const handleSubmit = async () => {
           <label class="block text-gray-700 font-bold mb-2">Kategori Project</label>
           <select v-model="form.category" required class="w-full border border-gray-300 rounded-lg px-4 py-2 bg-white">
             <option value="" disabled>Pilih Kategori</option>
-            <option value="Web App">Data Engineering</option>
-            <option value="Mobile App">LLM</option>
+            <option value="Data Engineering">Data Engineering</option>
+            <option value="LLM">LLM</option>
             <option value="Computer Vision">Computer Vision</option>
             <option value="NLP">NLP</option>
             <option value="IoT">IoT</option>
             <option value="Data Analysis">Data Analysis</option>
           </select>
+        </div>
+        <div>
+          <label class="block text-gray-700 font-bold mb-2">Link Repository GitHub</label>
+          <input v-model="form.github" type="url" placeholder="https://github.com/username/repo"
+                 class="w-full border border-gray-300 rounded-lg px-4 py-2 bg-white focus:ring-2 focus:ring-blue-500 outline-none">
         </div>
         <div>
           <label class="block text-gray-700 font-bold mb-2">Teknologi (Pisahkan koma)</label>

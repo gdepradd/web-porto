@@ -12,7 +12,8 @@ const form = ref({
   description: '',
   tech: '',
   image: '',
-  category: '' // <--- Wajib ada
+  category: '',
+  github:''
 })
 
 const isSubmitting = ref(false)
@@ -30,7 +31,7 @@ const fetchProject = async () => {
     
     // Pastikan kategori terisi. Jika kosong di database, set string kosong.
     form.value.category = response.data.category || '' 
-
+    form.value.github = response.data.github || ''
     // Tech array jadi string
     if (response.data.tech) {
         form.value.tech = response.data.tech.join(', ')
@@ -60,7 +61,7 @@ const handleUpdate = async () => {
     formData.append('title', form.value.title)
     formData.append('description', form.value.description)
     formData.append('category', form.value.category) // <--- PENTING: Kirim Kategori
-    
+    formData.append('github', form.value.github)
     // Kirim tech sebagai array (looping) agar multer backend bisa baca
     techArray.forEach(t => formData.append('tech[]', t)) 
     
@@ -120,7 +121,11 @@ onMounted(() => {
             <option value="Data Analysis">Data Analysis</option>
           </select>
         </div>
-
+        <div>
+          <label class="block text-gray-700 font-bold mb-2">Link Repository GitHub</label>
+          <input v-model="form.github" type="url" placeholder="https://github.com/gdepradd/repo"
+                 class="w-full border border-gray-300 rounded-lg px-4 py-2 bg-white focus:ring-2 focus:ring-yellow-500 outline-none">
+        </div>
         <div>
           <label class="block text-gray-700 font-bold mb-2">Deskripsi Singkat</label>
           <textarea v-model="form.description" rows="3" required

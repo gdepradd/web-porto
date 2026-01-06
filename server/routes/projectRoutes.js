@@ -52,7 +52,8 @@ router.post('/', upload.single('image'), async (req, res) => {
         description: req.body.description,
         tech: req.body.tech, // Frontend harus kirim array tech
         image: imagePath, // Simpan URL gambar lokal
-        category: req.body.category
+        category: req.body.category,
+        github: req.body.github || ''
     })
 
     try {
@@ -71,7 +72,8 @@ router.put('/:id', upload.single('image'), async (req, res) => {
             title: req.body.title,
             description: req.body.description,
             tech: req.body.tech,
-            category: req.body.category
+            category: req.body.category,
+            github: req.body.github || ''
         }
 
         // Kalau user upload gambar baru, update field image-nya
