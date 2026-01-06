@@ -180,7 +180,27 @@ onMounted(() => {
       </div>
     </section>
     <section id="portfolio" class="py-24 px-6 bg-gray-800">
-      <div v-if="filteredProjects.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+  <div class="max-w-6xl mx-auto">
+    
+    <div class="flex items-center gap-2 mb-8">
+        <div class="h-1 w-10 bg-green-500"></div>
+        <h2 class="text-sm font-bold tracking-widest text-green-500 uppercase">Selected Works</h2>
+    </div>
+
+    <div class="flex flex-wrap gap-4 mb-12 justify-center md:justify-start">
+        <button 
+            v-for="cat in categories" 
+            :key="cat"
+            @click="selectedCategory = cat"
+            class="px-6 py-2 rounded-full border transition text-sm font-bold"
+            :class="selectedCategory === cat 
+                ? 'bg-green-600 text-white border-green-600' 
+                : 'text-gray-400 border-gray-700 hover:border-green-500 hover:text-white'"
+        >
+            {{ cat }}
+        </button>
+    </div>
+    <div v-if="filteredProjects.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
   
   <div v-for="item in filteredProjects" :key="item._id" class="group relative bg-gray-900 rounded-xl overflow-hidden hover:shadow-2xl hover:shadow-green-900/20 transition duration-300 border border-gray-700 flex flex-col h-full">
     
@@ -224,6 +244,11 @@ onMounted(() => {
   </div>
 
 </div>
+    <div v-else class="text-center text-gray-500 py-10">
+        Tidak ada project di kategori "{{ selectedCategory }}".
+    </div>
+
+  </div>
 </section>
 
     <section id="contact" class="py-24 px-6 bg-gray-900 text-center relative overflow-hidden">
