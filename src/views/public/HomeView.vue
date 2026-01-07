@@ -22,14 +22,14 @@ const skills = ref([])
 const certificates = ref([])
 const fetchSkills = async () => {
     try {
-        const res = await api.get('/api/projects')
+        const res = await api.get('/api/skill')
         skills.value = res.data
     } catch (e) { console.error(e) }
 }
 
 const fetchCerts = async () => {
     try {
-        const res = await api.get('/api/projects')
+        const res = await api.get('/api/certificates')
         certificates.value = res.data
     } catch (e) { console.error(e) }
 }
@@ -42,7 +42,7 @@ const fetchProjects = async () => {
 
 const fetchProfile = async () => {
   try {
-    const res = await api.get('/api/projects')
+    const res = await api.get('/api/profile')
     if (res.data) profile.value = res.data
   } catch (error) { console.error(error) }
 }
