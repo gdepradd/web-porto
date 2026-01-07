@@ -1,6 +1,7 @@
 <script setup>
 import { ref } from 'vue'
-import axios from 'axios'
+// Sesuaikan jumlah titik '../' dengan lokasi file Anda sekarang
+import api from '../../utils/api'
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
@@ -51,7 +52,7 @@ const handleSubmit = async () => {
     }
 
     // Kirim dengan Header khusus
-    await axios.post('http://localhost:5000/api/projects', formData, {
+    await api.post('/api/projects', formData, {
       headers: {
         'Content-Type': 'multipart/form-data'
       }

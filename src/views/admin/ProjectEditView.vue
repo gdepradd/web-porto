@@ -1,6 +1,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
-import axios from 'axios'
+// Sesuaikan jumlah titik '../' dengan lokasi file Anda sekarang
+import api from '../../utils/api'
 import { useRouter, useRoute } from 'vue-router'
 
 const router = useRouter()
@@ -22,7 +23,8 @@ const isSubmitting = ref(false)
 const fetchProject = async () => {
   try {
     const id = route.params.id
-    const response = await axios.get(`http://localhost:5000/api/projects/${id}`)
+    // Cukup panggil path belakangnya saja
+    const response = await api.get(`/api/projects/${id}`)
     
     // Masukkan data ke form
     form.value.title = response.data.title

@@ -22,27 +22,27 @@ const skills = ref([])
 const certificates = ref([])
 const fetchSkills = async () => {
     try {
-        const res = await axios.get('http://localhost:5000/api/skills')
+        const res = await api.get('/api/projects')
         skills.value = res.data
     } catch (e) { console.error(e) }
 }
 
 const fetchCerts = async () => {
     try {
-        const res = await axios.get('http://localhost:5000/api/certificates')
+        const res = await api.get('/api/projects')
         certificates.value = res.data
     } catch (e) { console.error(e) }
 }
 const fetchProjects = async () => {
   try {
-    const response = await axios.get('http://localhost:5000/api/projects')
+    const response = await api.get('/api/projects')
     projects.value = response.data
   } catch (error) { console.error(error) }
 }
 
 const fetchProfile = async () => {
   try {
-    const res = await axios.get('http://localhost:5000/api/profile')
+    const res = await api.get('/api/projects')
     if (res.data) profile.value = res.data
   } catch (error) { console.error(error) }
 }

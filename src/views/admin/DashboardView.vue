@@ -1,13 +1,12 @@
 <script setup>
 import { ref, onMounted } from 'vue'
-import axios from 'axios'
-
+import api from '../../utils/api'
 const projects = ref([])
 
 // 1. Fungsi Ambil Data (Sama seperti di Home)
 const fetchProjects = async () => {
   try {
-    const response = await axios.get('http://localhost:5000/api/projects')
+    const response = await api.get('/api/projects')
     projects.value = response.data
   } catch (error) {
     console.error("Gagal ambil data:", error)
@@ -19,7 +18,7 @@ const deleteProject = async (id) => {
   if (confirm("Yakin ingin menghapus project ini?")) {
     try {
       // Tembak API Delete ke Backend
-      await axios.delete(`http://localhost:5000/api/projects/${id}`)
+      await api.delete(`/api/projects/${id}`)
       
       // Refresh data di tabel tanpa reload halaman
       fetchProjects()

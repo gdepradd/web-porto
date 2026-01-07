@@ -1,7 +1,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
-import axios from 'axios'
-
+// Sesuaikan jumlah titik '../' dengan lokasi file Anda sekarang
+import api from '../../utils/api'
 const form = ref({
   name: '',
   role: '',
@@ -18,7 +18,7 @@ const isSubmitting = ref(false)
 // Ambil data profil saat ini
 const fetchProfile = async () => {
   try {
-    const response = await axios.get('http://localhost:5000/api/profile')
+    const response = await api.get('/api/profile')
     // Isi form dengan data dari server
     if (response.data) {
         form.value.name = response.data.name
@@ -57,7 +57,7 @@ const handleSave = async () => {
   }
 
   try {
-    const res = await axios.post('http://localhost:5000/api/profile', formData, {
+    const res = await api.post('/api/profile', formData, {
       headers: { 'Content-Type': 'multipart/form-data' }
     })
     // Update tampilan gambar dengan data baru

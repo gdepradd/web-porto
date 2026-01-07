@@ -1,7 +1,6 @@
 <script setup>
 import { ref, onMounted } from 'vue'
-import axios from 'axios'
-
+import api from '../../utils/api'
 // --- STATE SKILL ---
 const skills = ref([])
 const newSkill = ref('')
@@ -23,19 +22,19 @@ const formatDateForInput = (isoDate) => {
 // --- LOGIKA SKILL (Sama seperti sebelumnya) ---
 const fetchSkills = async () => {
     try {
-        const res = await axios.get('http://localhost:5000/api/skills')
+        const res = await api.get('/api/skills')
         skills.value = res.data
     } catch (e) { console.error(e) }
 }
 const addSkill = async () => {
     if(!newSkill.value) return
-    await axios.post('http://localhost:5000/api/skills', { name: newSkill.value })
+    await api.post('/api/skills', { name: newSkill.value })
     newSkill.value = ''
     fetchSkills()
 }
 const deleteSkill = async (id) => {
     if(confirm('Hapus skill ini?')) {
-        await axios.delete(`http://localhost:5000/api/skills/${id}`)
+        await api.delete(`/api/skills/${id}`)
         fetchSkills()
     }
 }
@@ -43,7 +42,7 @@ const deleteSkill = async (id) => {
 // --- LOGIKA CERTIFICATE ---
 const fetchCerts = async () => {
     try {
-        const res = await axios.get('http://localhost:5000/api/certificates')
+        const res = await api.get('/api/certificates')
         certificates.value = res.data
     } catch (e) { console.error(e) }
 }
@@ -94,13 +93,13 @@ const handleSubmitCert = async () => {
     try {
         if (isEditing.value) {
             // --- MODE UPDATE (PUT) ---
-            await axios.put(`http://localhost:5000/api/certificates/${certForm.value.id}`, formData, {
+            await api.put(`/api/certificates/${certForm.value.id}`, formData, {
                 headers: { 'Content-Type': 'multipart/form-data' }
             })
             alert('Sertifikat berhasil diupdate!')
         } else {
             // --- MODE CREATE (POST) ---
-            await axios.post('http://localhost:5000/api/certificates', formData, {
+            await api.post('/api/certificates', formData, {
                 headers: { 'Content-Type': 'multipart/form-data' }
             })
             alert('Sertifikat berhasil ditambahkan!')
@@ -117,7 +116,7 @@ const handleSubmitCert = async () => {
 
 const deleteCert = async (id) => {
     if(confirm('Hapus sertifikat ini?')) {
-        await axios.delete(`http://localhost:5000/api/certificates/${id}`)
+        await api.delete(`/api/certificates/${id}`)
         fetchCerts()
     }
 }
