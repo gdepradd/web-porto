@@ -1,6 +1,6 @@
 <script setup>
 import { ref, onMounted,computed } from 'vue'
-import axios from 'axios'
+import api from '../../utils/api'
 import Navbar from '../../components/public/Navbar.vue'
 const formatDate = (dateString) => {
     if(!dateString) return 'Seumur Hidup'

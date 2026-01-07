@@ -9,7 +9,7 @@ const password = ref('')
 // Fungsi Login Dummy
 const handleLogin = () => {
   // Ceritanya validasi sederhana
-  if (username.value === 'admin' && password.value === 'admin') {
+  if (username.value === 'admin' && password.value === 'putugede') {
     alert('Login Berhasil!')
     router.push('/admin') // Arahkan ke Dashboard
   } else {
