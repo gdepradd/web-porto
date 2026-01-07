@@ -29,7 +29,7 @@ const fetchSkills = async () => {
 
 const fetchCerts = async () => {
     try {
-        const res = await api.get('/api/certificates')
+        const res = await api.get('/api/Certificate')
         certificates.value = res.data
     } catch (e) { console.error(e) }
 }
