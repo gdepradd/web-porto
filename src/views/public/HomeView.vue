@@ -22,7 +22,7 @@ const skills = ref([])
 const certificates = ref([])
 const fetchSkills = async () => {
     try {
-        const res = await api.get('/api/skill')
+        const res = await api.get('/api/skills')
         skills.value = res.data
     } catch (e) { console.error(e) }
 }
