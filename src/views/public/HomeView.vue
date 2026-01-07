@@ -294,8 +294,7 @@ onMounted(() => {
         </div>
         
         <footer class="mt-20 border-t border-gray-800 pt-8 text-gray-600 text-sm">
-            &copy; 2024 {{ profile.name }}. All rights reserved.<br>
-            Built with <span class="text-green-500 font-bold">MEVN Stack</span> (MongoDB, Express, Vue, Node).
+            Made by {{ profile.name }}
         </footer>
     </div>
 </section>

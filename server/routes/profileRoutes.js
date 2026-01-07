@@ -1,27 +1,14 @@
 const express = require('express')
 const router = express.Router()
 const Profile = require('../models/Profile')
-const multer = require('multer')
-const path = require('path')
 
-// Konfigurasi Upload (Sama persis dengan Project)
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, 'uploads/')
-    },
-    filename: (req, file, cb) => {
-        cb(null, 'profile-' + Date.now() + path.extname(file.originalname))
-    }
-})
-const upload = multer({ storage: storage })
+// 1. IMPORT UPLOAD CLOUDINARY (Bukan Multer Biasa)
+const upload = require('../utils/cloudinary')
 
-// 1. GET: Ambil Data Profil
+// GET: Ambil Data Profil
 router.get('/', async (req, res) => {
     try {
-        // Cari data pertama yang ditemukan
         let profile = await Profile.findOne()
-
-        // Kalau belum ada (masih baru), kirim data dummy biar tidak error
         if (!profile) {
             profile = {
                 name: "Nama Anda",
@@ -36,11 +23,10 @@ router.get('/', async (req, res) => {
     }
 })
 
-// 2. POST/PUT: Simpan atau Update Profil
-// Kita pakai POST saja biar gampang, fungsinya "Upsert" (Update kalau ada, Insert kalau belum)
+// POST: Simpan atau Update Profil
 router.post('/', upload.single('image'), async (req, res) => {
     try {
-        // Data yang mau disimpan
+        // Data text dari form
         let updateData = {
             name: req.body.name,
             role: req.body.role,
@@ -51,20 +37,22 @@ router.post('/', upload.single('image'), async (req, res) => {
             email: req.body.email
         }
 
-        // Kalau ada gambar baru, update path gambarnya
+        // 2. LOGIKA GAMBAR CLOUDINARY
+        // Kalau user upload gambar, Cloudinary otomatis kasih URL di req.file.path
         if (req.file) {
-            updateData.image = `http://localhost:5000/uploads/${req.file.filename}`
+            updateData.image = req.file.path
         }
 
         // Cari 1 data, lalu update. Kalau tidak ada, buat baru (upsert: true).
         const profile = await Profile.findOneAndUpdate(
-            {}, // Kriteria: Kosong (artinya ambil dokumen pertama apa saja)
+            {},
             updateData,
             { new: true, upsert: true }
         )
 
         res.json(profile)
     } catch (err) {
+        console.error(err) // Biar error kelihatan di terminal
         res.status(400).json({ message: err.message })
     }
 })

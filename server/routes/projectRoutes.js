@@ -1,22 +1,9 @@
 const express = require('express')
 const router = express.Router()
 const Project = require('../models/Project')
-const multer = require('multer')
-const path = require('path')
+const upload = require('../utils/cloudinary') // Import Cloudinary
 
-// --- KONFIGURASI MULTER (PENYIMPANAN) ---
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, 'uploads/') // Simpan di folder uploads
-    },
-    filename: (req, file, cb) => {
-        // Namai file: timestamp-namaasli.jpg (agar tidak bentrok)
-        cb(null, Date.now() + '-' + file.originalname)
-    }
-})
-const upload = multer({ storage: storage })
-
-// 1. GET: Ambil semua data (Kode Lama - Tidak Berubah)
+// 1. GET ALL
 router.get('/', async (req, res) => {
     try {
         const projects = await Project.find()
@@ -26,7 +13,7 @@ router.get('/', async (req, res) => {
     }
 })
 
-// 2. GET SINGLE (Kode Lama - Tidak Berubah)
+// 2. GET SINGLE
 router.get('/:id', async (req, res) => {
     try {
         const project = await Project.findById(req.params.id)
@@ -37,26 +24,21 @@ router.get('/:id', async (req, res) => {
     }
 })
 
-// 3. POST: Tambah Project dengan Upload Gambar
-// Perhatikan: upload.single('image') artinya menerima 1 file dari field bernama 'image'
+// 3. POST (Tambah Project Baru)
 router.post('/', upload.single('image'), async (req, res) => {
-
-    // Cek apakah ada file yang diupload?
-    // Jika ada, buat URL-nya. Jika tidak, pakai gambar placeholder.
-    const imagePath = req.file
-        ? `http://localhost:5000/uploads/${req.file.filename}`
-        : 'https://placehold.co/600x400';
-
-    const project = new Project({
-        title: req.body.title,
-        description: req.body.description,
-        tech: req.body.tech, // Frontend harus kirim array tech
-        image: imagePath, // Simpan URL gambar lokal
-        category: req.body.category,
-        github: req.body.github || ''
-    })
-
     try {
+        // Logika URL Gambar Cloudinary: req.file.path
+        const imagePath = req.file ? req.file.path : 'https://placehold.co/600x400';
+
+        const project = new Project({
+            title: req.body.title,
+            description: req.body.description,
+            tech: req.body.tech, // Dikirim sebagai array/list dari frontend
+            image: imagePath,
+            category: req.body.category,
+            github: req.body.github || ''
+        })
+
         const newProject = await project.save()
         res.status(201).json(newProject)
     } catch (err) {
@@ -64,21 +46,20 @@ router.post('/', upload.single('image'), async (req, res) => {
     }
 })
 
-// 4. PUT: Update Project (Bisa ganti gambar, bisa tidak)
+// 4. PUT (Update Project)
 router.put('/:id', upload.single('image'), async (req, res) => {
     try {
-        // Siapkan data update
         let updateData = {
             title: req.body.title,
             description: req.body.description,
             tech: req.body.tech,
             category: req.body.category,
-            github: req.body.github || ''
+            github: req.body.github
         }
 
-        // Kalau user upload gambar baru, update field image-nya
+        // Kalau ada gambar baru, update URL-nya pakai Cloudinary
         if (req.file) {
-            updateData.image = `http://localhost:5000/uploads/${req.file.filename}`
+            updateData.image = req.file.path
         }
 
         const updatedProject = await Project.findByIdAndUpdate(
@@ -92,7 +73,7 @@ router.put('/:id', upload.single('image'), async (req, res) => {
     }
 })
 
-// 5. DELETE (Kode Lama - Tidak Berubah)
+// 5. DELETE
 router.delete('/:id', async (req, res) => {
     try {
         await Project.findByIdAndDelete(req.params.id)

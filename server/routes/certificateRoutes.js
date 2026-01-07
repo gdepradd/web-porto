@@ -1,77 +1,69 @@
 const express = require('express')
 const router = express.Router()
 const Certificate = require('../models/Certificate')
-const multer = require('multer')
-const path = require('path')
+const upload = require('../utils/cloudinary') // Import Cloudinary
 
-// Config Multer (Upload Gambar)
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => { cb(null, 'uploads/') },
-    filename: (req, file, cb) => { cb(null, 'cert-' + Date.now() + path.extname(file.originalname)) }
-})
-const upload = multer({ storage: storage })
-
-// GET Semua Sertifikat
+// 1. GET ALL
 router.get('/', async (req, res) => {
     try {
-        const certs = await Certificate.find().sort({ issuedAt: -1 }) // Urutkan dari terbaru
+        const certs = await Certificate.find().sort({ issuedAt: -1 })
         res.json(certs)
     } catch (err) { res.status(500).json({ message: err.message }) }
 })
 
-// POST Sertifikat Baru
+// 2. POST (Upload Sertifikat)
 router.post('/', upload.single('image'), async (req, res) => {
     try {
-        const imagePath = req.file ? `http://localhost:5000/uploads/${req.file.filename}` : ''
+        // Ambil URL dari Cloudinary
+        const imagePath = req.file ? req.file.path : ''
 
         const cert = new Certificate({
             title: req.body.title,
             issuer: req.body.issuer,
             issuedAt: req.body.issuedAt,
-            expiresAt: req.body.expiresAt || null, // Bisa kosong
-            image: imagePath,
-            link: req.body.link || ''
+            expiresAt: req.body.expiresAt || null,
+            link: req.body.link || '',
+            image: imagePath
         })
         const newCert = await cert.save()
         res.status(201).json(newCert)
     } catch (err) { res.status(400).json({ message: err.message }) }
 })
+
+// 3. PUT (Update Sertifikat)
 router.put('/:id', upload.single('image'), async (req, res) => {
     try {
-        // 1. Siapkan data yang mau diupdate (Text)
         let updateData = {
             title: req.body.title,
             issuer: req.body.issuer,
             issuedAt: req.body.issuedAt,
-            link: req.body.link || '' // Update Link juga
+            link: req.body.link || ''
         }
 
-        // Cek tanggal expired (karena bisa null)
+        // Logika tanggal expired
         if (req.body.expiresAt) {
             updateData.expiresAt = req.body.expiresAt
         } else {
-            // Jika user mengosongkan tanggal, set ke null (lifetime)
             updateData.expiresAt = null
         }
 
-        // 2. Cek Gambar: Kalau ada file baru, ganti path-nya
+        // Kalau ganti gambar
         if (req.file) {
-            updateData.image = `http://localhost:5000/uploads/${req.file.filename}`
+            updateData.image = req.file.path
         }
 
-        // 3. Eksekusi Update ke Database
         const updatedCert = await Certificate.findByIdAndUpdate(
             req.params.id,
             updateData,
-            { new: true } // Kembalikan data terbaru
+            { new: true }
         )
-
         res.json(updatedCert)
     } catch (err) {
         res.status(400).json({ message: err.message })
     }
 })
-// DELETE Sertifikat
+
+// 4. DELETE
 router.delete('/:id', async (req, res) => {
     try {
         await Certificate.findByIdAndDelete(req.params.id)
