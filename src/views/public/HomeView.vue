@@ -36,8 +36,19 @@ const fetchCerts = async () => {
 const fetchProjects = async () => {
   try {
     const response = await api.get('/api/projects')
-    projects.value = response.data
-  } catch (error) { console.error(error) }
+    
+    // 🛡️ PENGECEKAN KEAMANAN:
+    // Cuma terima kalau bentuknya Array (List)
+    if (Array.isArray(response.data)) {
+        projects.value = response.data
+    } else {
+        console.error("Bukan Array! Isinya:", response.data)
+        projects.value = [] // Paksa jadi array kosong biar gak error
+    }
+  } catch (error) { 
+    console.error(error)
+    projects.value = [] // Kalau error, kosongin aja
+  }
 }
 
 const fetchProfile = async () => {
