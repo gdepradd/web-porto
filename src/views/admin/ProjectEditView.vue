@@ -74,7 +74,7 @@ const handleUpdate = async () => {
     // PENTING: Karena route PUT kita di tutorial sebelumnya sudah pakai 'upload.single', 
     // maka kita harus kirim pake FormData, bukan JSON biasa.
     
-    await axios.put(`http://localhost:5000/api/projects/${id}`, formData, {
+    await api.put(`/api/projects/${id}`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
     })
     
