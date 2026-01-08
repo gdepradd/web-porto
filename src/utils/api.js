@@ -1,11 +1,10 @@
 import axios from 'axios';
 
 const api = axios.create({
-    // KITA PAKSA KOSONG DULU BIAR JALAN DI VERCEL
+    // KITA HARDCODE KOSONG.
+    // Jangan pakai if-else, jangan pakai import.meta.env
+    // Biarkan browser yang menempelkan domain sendiri.
     baseURL: '',
-
-    // Script lama (komentari dulu):
-    // baseURL: import.meta.env.PROD ? '' : 'http://localhost:5000',
 
     withCredentials: true
 });
