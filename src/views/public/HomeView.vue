@@ -89,7 +89,7 @@ onMounted(() => {
           {{ profile.name }}
         </h1>
         <p class="text-xl md:text-2xl text-gray-400">
-          I'm a passionate <span class="text-green-500 font-bold border-b-2 border-green-500">AI/ML Engineering</span>
+          I'm a passionate <span class="text-green-500 font-bold border-b-2 border-green-500">AI/Data Engineer</span>
         </p>
         
       </div>
@@ -243,7 +243,7 @@ onMounted(() => {
         <span v-if="item.github" class="text-xs text-gray-500 font-normal ml-2">↗</span>
       </h3>
       
-      <p class="text-gray-400 text-sm mb-4 line-clamp-2 flex-1">{{ item.description }}</p>
+      <p class="text-gray-300 text-sm mb-4 h-24 overflow-y-auto pr-1">{{ item.description }}</p>
       
       <div class="flex flex-wrap gap-2 mt-auto">
         <span v-for="tech in item.tech" :key="tech" class="px-2 py-1 bg-gray-800 text-green-400 text-xs rounded border border-gray-700">
@@ -305,7 +305,7 @@ onMounted(() => {
         </div>
         
         <footer class="mt-20 border-t border-gray-800 pt-8 text-gray-600 text-sm">
-            Made by {{ profile.name }}
+            Made by {{ profile.name }} • 2026.
         </footer>
     </div>
 </section>

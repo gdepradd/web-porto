@@ -116,11 +116,11 @@ onMounted(() => {
           <select v-model="form.category" required class="w-full border border-gray-300 rounded-lg px-4 py-2 bg-white focus:ring-2 focus:ring-yellow-500">
             <option value="" disabled>Pilih Kategori</option>
             <option value="Data Engineering">Data Engineering</option>
-            <option value="CI/CD">CI/CD</option>
+            <option value="LLM">LLM</option>
             <option value="Computer Vision">Computer Vision</option>
             <option value="NLP">NLP</option>
             <option value="IoT">IoT</option>
-            <option value="Data Analysis">Data Analysis</option>
+            <option value="Data Analysis">CI/CD</option>
           </select>
         </div>
         <div>
