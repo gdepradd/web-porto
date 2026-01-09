@@ -191,80 +191,80 @@ onMounted(() => {
       </div>
     </section>
 <section id="portfolio" class="py-24 px-6 bg-gray-800">
-  <div class="max-w-6xl mx-auto">
+    <div class="max-w-6xl mx-auto">
+      
+      <div class="flex items-center gap-2 mb-8">
+          <div class="h-1 w-10 bg-green-500"></div>
+          <h2 class="text-sm font-bold tracking-widest text-green-500 uppercase">Selected Works</h2>
+      </div>
+
+      <div class="flex flex-wrap gap-4 mb-12 justify-center md:justify-start">
+          <button 
+              v-for="cat in categories" 
+              :key="cat"
+              @click="selectedCategory = cat"
+              class="px-6 py-2 rounded-full border transition text-sm font-bold"
+              :class="selectedCategory === cat 
+                  ? 'bg-green-600 text-white border-green-600' 
+                  : 'text-gray-400 border-gray-700 hover:border-green-500 hover:text-white'"
+          >
+              {{ cat }}
+          </button>
+      </div>
+
+      <div v-if="filteredProjects.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
     
-    <div class="flex items-center gap-2 mb-8">
-        <div class="h-1 w-10 bg-green-500"></div>
-        <h2 class="text-sm font-bold tracking-widest text-green-500 uppercase">Selected Works</h2>
-    </div>
-
-    <div class="flex flex-wrap gap-4 mb-12 justify-center md:justify-start">
-        <button 
-            v-for="cat in categories" 
-            :key="cat"
-            @click="selectedCategory = cat"
-            class="px-6 py-2 rounded-full border transition text-sm font-bold"
-            :class="selectedCategory === cat 
-                ? 'bg-green-600 text-white border-green-600' 
-                : 'text-gray-400 border-gray-700 hover:border-green-500 hover:text-white'"
-        >
-            {{ cat }}
-        </button>
-    </div>
-
-    <div v-if="filteredProjects.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-  
-      <div v-for="item in filteredProjects" :key="item._id" class="group relative bg-gray-900 rounded-xl overflow-hidden hover:shadow-2xl hover:shadow-green-900/20 transition duration-300 border border-gray-700 flex flex-col h-full">
-        
-        <a 
-            v-if="item.github" 
-            :href="item.github" 
-            target="_blank" 
-            class="absolute inset-0 z-20 cursor-pointer"
-            title="Lihat Source Code di GitHub"
-        ></a>
-
-        <div class="relative overflow-hidden h-48">
-            <img :src="item.image" :alt="item.title" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
-            
-            <div class="absolute top-2 right-2 bg-black/70 text-white text-xs px-2 py-1 rounded backdrop-blur-sm border border-gray-600 z-10">
-                {{ item.category }}
-            </div>
-
-            <div v-if="item.github" class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center transition backdrop-blur-sm z-10 pointer-events-none">
-                 <div class="bg-gray-800 p-3 rounded-full border border-gray-600">
-                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
-                 </div>
-            </div>
-        </div>
-        
-        <div class="p-6 flex-1 flex flex-col">
-          <h3 class="text-xl font-bold text-white mb-2 group-hover:text-green-400 transition">
-            {{ item.title }} 
-            <span v-if="item.github" class="text-xs text-gray-500 font-normal ml-2">↗</span>
-          </h3>
+        <div v-for="item in filteredProjects" :key="item._id" class="group relative bg-gray-900 rounded-xl overflow-hidden hover:shadow-2xl hover:shadow-green-900/20 transition duration-300 border border-gray-700 flex flex-col h-full">
           
-          <p class="text-gray-300 text-sm mb-4 h-24 overflow-y-auto pr-2 relative z-30">
-            {{ item.description }}
-          </p>
-          
-          <div class="flex flex-wrap gap-2 mt-auto">
-            <span v-for="tech in item.tech" :key="tech" class="px-2 py-1 bg-gray-800 text-green-400 text-xs rounded border border-gray-700">
-              {{ tech }}
-            </span>
+          <a 
+              v-if="item.github" 
+              :href="item.github" 
+              target="_blank" 
+              class="absolute inset-0 z-20 cursor-pointer"
+              title="Lihat Source Code di GitHub"
+          ></a>
+
+          <div class="relative overflow-hidden h-48">
+              <img :src="item.image" :alt="item.title" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+              
+              <div class="absolute top-2 right-2 bg-black/70 text-white text-xs px-2 py-1 rounded backdrop-blur-sm border border-gray-600 z-10">
+                  {{ item.category }}
+              </div>
+
+              <div v-if="item.github" class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center transition backdrop-blur-sm z-10 pointer-events-none">
+                   <div class="bg-gray-800 p-3 rounded-full border border-gray-600">
+                       <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                   </div>
+              </div>
           </div>
+          
+          <div class="p-6 flex-1 flex flex-col">
+            <h3 class="text-xl font-bold text-white mb-2 group-hover:text-green-400 transition">
+              {{ item.title }} 
+              <span v-if="item.github" class="text-xs text-gray-500 font-normal ml-2">↗</span>
+            </h3>
+            
+            <p class="custom-scroll text-gray-300 text-sm mb-4 h-24 overflow-y-auto pr-2 relative z-30">
+              {{ item.description }}
+            </p>
+            
+            <div class="flex flex-wrap gap-2 mt-auto">
+              <span v-for="tech in item.tech" :key="tech" class="px-2 py-1 bg-gray-800 text-green-400 text-xs rounded border border-gray-700">
+                {{ tech }}
+              </span>
+            </div>
+          </div>
+
         </div>
 
       </div>
+      
+      <div v-else class="text-center text-gray-500 py-10">
+          Tidak ada project di kategori "{{ selectedCategory }}".
+      </div>
 
     </div>
-    
-    <div v-else class="text-center text-gray-500 py-10">
-        Tidak ada project di kategori "{{ selectedCategory }}".
-    </div>
-
-  </div>
-</section>
+  </section>
 
     <section id="contact" class="py-24 px-6 bg-gray-900 text-center relative overflow-hidden">
     <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-gray-900 via-green-500 to-gray-900"></div>
@@ -318,8 +318,35 @@ onMounted(() => {
 </template>
 
 <style>
-/* Smooth Scroll untuk perpindahan section */
 html {
   scroll-behavior: smooth;
+}
+</style>
+
+<style scoped>
+/* CSS UNTUK SCROLLBAR GELAP */
+
+/* 1. Chrome, Safari, Edge */
+.custom-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+
+.custom-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scroll::-webkit-scrollbar-thumb {
+  background-color: #374151; /* Gray-700 */
+  border-radius: 20px;
+}
+
+.custom-scroll::-webkit-scrollbar-thumb:hover {
+  background-color: #4b5563; /* Gray-600 */
+}
+
+/* 2. Firefox */
+.custom-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: #374151 transparent;
 }
 </style>
