@@ -14,7 +14,7 @@ cloudinary.config({
 const storage = new CloudinaryStorage({
     cloudinary: cloudinary,
     params: {
-        folder: 'porto-uploads', // Nama folder nanti di dashboard Cloudinary
+        folder: 'portfolio_uploads', // Nama folder nanti di dashboard Cloudinary
         allowed_formats: ['jpg', 'png', 'jpeg', 'webp'],
         // public_id: (req, file) => 'computed-filename-using-request',
     },

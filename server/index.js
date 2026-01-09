@@ -18,6 +18,9 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')))
 app.use('/api/profile', profileRoutes)
 app.use('/api/skills', skillRoutes)
 app.use('/api/certificates', certificateRoutes)
+process.on('unhandledRejection', (reason, promise) => {
+    console.error('🔴 UNHANDLED REJECTION DETECTED:', JSON.stringify(reason, null, 2));
+});
 // 2. KONEKSI DB
 mongoose.connect(process.env.MONGO_URI)
     .then(() => console.log("✅ Berhasil connect ke MongoDB!"))
@@ -31,7 +34,13 @@ app.use('/api/projects', projectRoutes) // <--- CEK INI
 app.get('/', (req, res) => {
     res.send('Server Utama Jalan!')
 })
-
+app.use((err, req, res, next) => {
+    console.error("❌ ERROR FULL DETAIL:", JSON.stringify(err, null, 2));
+    res.status(500).json({
+        message: "Upload Gagal",
+        error_detail: err
+    });
+});
 if (require.main === module) {
     app.listen(PORT, () => {
         console.log(`Server berjalan di http://localhost:${PORT}`)
