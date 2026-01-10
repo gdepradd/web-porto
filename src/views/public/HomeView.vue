@@ -82,7 +82,11 @@ onMounted(() => {
 <template>
   <div class="bg-gray-900 text-gray-100 min-h-screen font-sans selection:bg-green-500 selection:text-white">
     <Navbar />
-
+    <vue-particles
+      id="tsparticles"
+      class="absolute inset-0 z-0"
+      :options="particlesConfig"
+    />
     <section id="home" class="h-screen flex flex-col justify-center px-6 max-w-6xl mx-auto pt-16">
       <div class="space-y-4 animate-fade-in-up">
         <h1 class="text-5xl md:text-7xl font-bold text-white tracking-tight">
@@ -348,5 +352,85 @@ html {
 .custom-scroll {
   scrollbar-width: thin;
   scrollbar-color: #374151 transparent;
+}
+</style>
+<script setup>
+// Config Partikel "Neural Network"
+const particlesConfig = {
+  background: {
+    color: { value: "#111827" }, // Warna bg-gray-900
+  },
+  fpsLimit: 120,
+  interactivity: {
+    events: {
+      onClick: { enable: true, mode: "push" },
+      onHover: { enable: true, mode: "grab" }, // Efek jaring laba-laba saat di-hover
+      resize: true,
+    },
+    modes: {
+      grab: { distance: 140, links: { opacity: 1 } },
+      push: { quantity: 4 },
+    },
+  },
+  particles: {
+    color: { value: "#10B981" }, // Warna titik (Hijau Green-500)
+    links: {
+      color: "#10B981", // Warna garis penghubung
+      distance: 150,
+      enable: true,
+      opacity: 0.3,
+      width: 1,
+    },
+    move: {
+      direction: "none",
+      enable: true,
+      outModes: { default: "bounce" },
+      random: false,
+      speed: 1.5, // Kecepatan gerak
+      straight: false,
+    },
+    number: {
+      density: { enable: true, area: 800 },
+      value: 80, // Jumlah partikel
+    },
+    opacity: { value: 0.5 },
+    shape: { type: "circle" },
+    size: { value: { min: 1, max: 3 } },
+  },
+  detectRetina: true,
+};
+</script>
+🎨 Opsi 2: Animated Gradient (Tanpa Install Library)
+Kalau tidak mau install library berat, kita bisa buat efek warna bergerak "Aurora" pakai CSS saja. Ini terlihat modern dan clean.
+
+Cara Pasang:
+Langsung di HomeView.vue atau App.vue:
+
+HTML
+
+<template>
+  <div class="min-h-screen text-white bg-gradient-to-br from-gray-900 via-green-900 to-black animate-gradient background-size-400">
+      
+      <div class="container mx-auto px-6 py-20">
+          <h1>Gede Pradnyananda</h1>
+      </div>
+
+  </div>
+</template>
+
+<style>
+/* Animasi background gerak */
+@keyframes gradient {
+	0% { background-position: 0% 50%; }
+	50% { background-position: 100% 50%; }
+	100% { background-position: 0% 50%; }
+}
+
+.animate-gradient {
+	animation: gradient 15s ease infinite;
+}
+
+.background-size-400 {
+    background-size: 400% 400%;
 }
 </style>
