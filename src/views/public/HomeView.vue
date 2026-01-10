@@ -80,7 +80,23 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="bg-gray-900 text-gray-100 min-h-screen font-sans selection:bg-green-500 selection:text-white">
+  <div class="relative bg-gray-900 text-gray-100 min-h-screen font-sans selection:bg-green-500 selection:text-white overflow-hidden">
+    
+    <div class="absolute inset-0 h-screen z-0 overflow-hidden">
+        
+        <img 
+            src="public/Background home page .png" 
+            alt="AI Background" 
+            class="w-full h-full object-cover object-center opacity-60" 
+        />
+
+        <div class="absolute inset-0 bg-gray-900/50 mix-blend-multiply"></div>
+
+        <div class="absolute bottom-0 left-0 w-full h-3/4 bg-gradient-to-b from-transparent via-gray-900/80 to-gray-900"></div>
+    </div>
+
+
+    <div class="relative z-10">
     <Navbar />
 
     <section id="home" class="h-screen flex flex-col justify-center px-6 max-w-6xl mx-auto pt-16">
@@ -314,7 +330,8 @@ onMounted(() => {
     </div>
 </section>
 
-  </div>
+      </div>
+    </div>
 </template>
 
 <style>
