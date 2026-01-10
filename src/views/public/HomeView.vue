@@ -85,7 +85,7 @@ onMounted(() => {
     <div class="absolute inset-0 h-screen z-0 overflow-hidden">
         
         <img 
-            src="public/Background home page .png" 
+            src="/bg-home.png" 
             alt="AI Background" 
             class="w-full h-full object-cover object-center opacity-60" 
         />
