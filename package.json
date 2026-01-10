@@ -8,7 +8,6 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@tsparticles/vue3": "^3.0.1",
     "axios": "^1.13.2",
     "cloudinary": "^1.41.3",
     "cors": "^2.8.5",
@@ -17,7 +16,6 @@
     "mongoose": "^9.1.2",
     "multer": "^2.0.2",
     "multer-storage-cloudinary": "^4.0.0",
-    "tsparticles-slim": "^2.12.0",
     "vue": "^3.5.24",
     "vue-router": "^4.6.4"
   },

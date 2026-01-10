@@ -16,47 +16,7 @@ const profile = ref({
     description: '',
     image: ''
 })
-const particlesConfig = {
-  background: { color: { value: "#111827" } },
-  fpsLimit: 120,
-  interactivity: {
-    events: {
-      onClick: { enable: true, mode: "push" },
-      onHover: { enable: true, mode: "grab" },
-      resize: true,
-    },
-    modes: {
-      grab: { distance: 140, links: { opacity: 1 } },
-      push: { quantity: 4 },
-    },
-  },
-  particles: {
-    color: { value: "#22c55e" },
-    links: {
-      color: "#22c55e",
-      distance: 150,
-      enable: true,
-      opacity: 0.2,
-      width: 1,
-    },
-    move: {
-      direction: "none",
-      enable: true,
-      outModes: { default: "bounce" },
-      random: false,
-      speed: 1.2,
-      straight: false,
-    },
-    number: {
-      density: { enable: true, area: 800 },
-      value: 60,
-    },
-    opacity: { value: 0.5 },
-    shape: { type: "circle" },
-    size: { value: { min: 1, max: 3 } },
-  },
-  detectRetina: true,
-};
+
 // Data Skill (Hardcode dulu sesuai referensi gambar)
 const skills = ref([])
 const certificates = ref([])
@@ -120,19 +80,21 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="relative bg-gray-900 text-gray-100 min-h-screen font-sans selection:bg-green-500 selection:text-white overflow-x-hidden">
+  <div class="relative bg-gray-900 text-gray-100 min-h-screen font-sans selection:bg-green-500 selection:text-white overflow-hidden">
+    
+    <div class="absolute top-0 -left-4 w-72 h-72 bg-purple-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
+    
+    <div class="absolute top-0 -right-4 w-72 h-72 bg-green-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000"></div>
+    
+    <div class="absolute -bottom-8 left-20 w-72 h-72 bg-blue-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-4000"></div>
 
-    <vue-particles
-      id="tsparticles"
-      class="absolute inset-0 z-0"
-      :options="particlesConfig"
-    />
+    <div class="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 brightness-100 contrast-150"></div>
 
     <div class="relative z-10">
         
         <Navbar />
         
-        <section id="home" class="h-screen flex flex-col justify-center px-6 max-w-6xl mx-auto pt-16 bg-transparent">
+        <section id="home" class="h-screen flex flex-col justify-center px-6 max-w-6xl mx-auto pt-16">
           <div class="space-y-4 animate-fade-in-up">
             <h1 class="text-5xl md:text-7xl font-bold text-white tracking-tight">
               {{ profile.name }}
@@ -143,7 +105,7 @@ onMounted(() => {
           </div>
         </section>
 
-        <section id="about" class="py-24 px-6 bg-gray-900/80 backdrop-blur-sm">
+        <section id="about" class="py-24 px-6 bg-gray-900/50 backdrop-blur-sm border-t border-gray-800">
           <div class="max-w-6xl mx-auto">
             <div class="flex items-center gap-2 mb-12">
                 <div class="h-1 w-10 bg-green-500"></div>
@@ -156,7 +118,7 @@ onMounted(() => {
                     v-if="profile.image" 
                     :src="profile.image" 
                     alt="Profile" 
-                    class="w-full h-[500px] object-cover rounded-lg grayscale hover:grayscale-0 transition duration-500 shadow-2xl"
+                    class="w-full h-[500px] object-cover rounded-lg grayscale hover:grayscale-0 transition duration-500 shadow-2xl ring-1 ring-gray-700"
                   >
                   <div v-else class="w-full h-[500px] bg-gray-800 rounded-lg animate-pulse"></div>
               </div>
@@ -183,10 +145,9 @@ onMounted(() => {
                 
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
                     <div v-for="item in skills" :key="item._id" 
-                         class="bg-gray-800/80 border border-gray-700 p-4 rounded hover:border-green-500 transition cursor-default text-center">
+                         class="bg-gray-800/60 border border-gray-700 p-4 rounded hover:border-green-500 hover:bg-gray-800 transition cursor-default text-center backdrop-blur-md">
                         <span class="font-bold text-gray-200">{{ item.name }}</span>
                     </div>
-                    
                     <div v-if="skills.length === 0" class="col-span-4 text-gray-500 text-sm">Loading skills...</div>
                 </div>
             </div>
@@ -198,19 +159,9 @@ onMounted(() => {
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div v-for="cert in certificates" :key="cert._id" class="group relative bg-gray-800/90 rounded-lg overflow-hidden border border-gray-700 hover:shadow-lg hover:border-green-500 transition duration-300">
+                    <div v-for="cert in certificates" :key="cert._id" class="group relative bg-gray-800/60 rounded-lg overflow-hidden border border-gray-700 hover:shadow-lg hover:border-green-500 transition duration-300 backdrop-blur-md">
                         
-                        <div class="absolute top-0 right-0 bg-red-600 text-white text-xs p-1 z-50" v-if="!cert.link">
-                            No Link
-                        </div>
-
-                        <a 
-                            v-if="cert.link" 
-                            :href="cert.link" 
-                            target="_blank" 
-                            class="absolute inset-0 z-20 cursor-pointer"
-                            title="Klik untuk melihat sertifikat"
-                        ></a>
+                        <a v-if="cert.link" :href="cert.link" target="_blank" class="absolute inset-0 z-20 cursor-pointer"></a>
 
                         <div class="h-48 overflow-hidden bg-gray-700 relative">
                             <img :src="cert.image" :alt="cert.title" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
@@ -222,23 +173,16 @@ onMounted(() => {
                             </div>
                         </div>
                         
-        
-        <div class="p-5">
-            <h3 class="font-bold text-white text-lg mb-1 leading-tight group-hover:text-green-400 transition">{{ cert.title }}</h3>
-            <p class="text-green-600 text-sm mb-4">{{ cert.issuer }}</p>
-            
-            <div class="flex justify-between items-center text-xs text-gray-500 border-t border-gray-700 pt-3">
-                <span>Issued: {{ formatDate(cert.issuedAt) }}</span>
-                <span v-if="cert.expiresAt">Exp: {{ formatDate(cert.expiresAt) }}</span>
-                <span v-else class="text-green-600">Lifetime</span>
+                        <div class="p-4">
+                             <h3 class="font-bold text-white line-clamp-2">{{ cert.title }}</h3>
+                             <p class="text-gray-400 text-xs mt-1">{{ cert.issuer }}</p>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
 
-    </div>
-</div>
-    </div>
-      </div>
-    </section>
+          </div>
+        </section>
 <section id="portfolio" class="py-24 px-6 bg-gray-800">
     <div class="max-w-6xl mx-auto">
       
@@ -363,8 +307,8 @@ onMounted(() => {
     </div>
 </section>
 
+      </div>
     </div>
-  </div>
 </template>
 
 <style>
@@ -395,6 +339,43 @@ html {
 }
 
 /* 2. Firefox */
+.custom-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: #374151 transparent;
+}
+@keyframes blob {
+  0% { transform: translate(0px, 0px) scale(1); }
+  33% { transform: translate(30px, -50px) scale(1.1); }
+  66% { transform: translate(-20px, 20px) scale(0.9); }
+  100% { transform: translate(0px, 0px) scale(1); }
+}
+
+.animate-blob {
+  animation: blob 7s infinite;
+}
+
+.animation-delay-2000 {
+  animation-delay: 2s;
+}
+
+.animation-delay-4000 {
+  animation-delay: 4s;
+}
+
+/* SCROLLBAR GELAP */
+.custom-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+.custom-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+.custom-scroll::-webkit-scrollbar-thumb {
+  background-color: #374151;
+  border-radius: 20px;
+}
+.custom-scroll::-webkit-scrollbar-thumb:hover {
+  background-color: #4b5563;
+}
 .custom-scroll {
   scrollbar-width: thin;
   scrollbar-color: #374151 transparent;
