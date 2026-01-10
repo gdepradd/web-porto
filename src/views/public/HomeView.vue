@@ -16,7 +16,47 @@ const profile = ref({
     description: '',
     image: ''
 })
-
+const particlesConfig = {
+  background: { color: { value: "#111827" } },
+  fpsLimit: 120,
+  interactivity: {
+    events: {
+      onClick: { enable: true, mode: "push" },
+      onHover: { enable: true, mode: "grab" },
+      resize: true,
+    },
+    modes: {
+      grab: { distance: 140, links: { opacity: 1 } },
+      push: { quantity: 4 },
+    },
+  },
+  particles: {
+    color: { value: "#22c55e" },
+    links: {
+      color: "#22c55e",
+      distance: 150,
+      enable: true,
+      opacity: 0.2,
+      width: 1,
+    },
+    move: {
+      direction: "none",
+      enable: true,
+      outModes: { default: "bounce" },
+      random: false,
+      speed: 1.2,
+      straight: false,
+    },
+    number: {
+      density: { enable: true, area: 800 },
+      value: 60,
+    },
+    opacity: { value: 0.5 },
+    shape: { type: "circle" },
+    size: { value: { min: 1, max: 3 } },
+  },
+  detectRetina: true,
+};
 // Data Skill (Hardcode dulu sesuai referensi gambar)
 const skills = ref([])
 const certificates = ref([])
@@ -80,103 +120,108 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="bg-gray-900 text-gray-100 min-h-screen font-sans selection:bg-green-500 selection:text-white">
-    <Navbar />
+  <div class="relative bg-gray-900 text-gray-100 min-h-screen font-sans selection:bg-green-500 selection:text-white overflow-x-hidden">
+
     <vue-particles
       id="tsparticles"
       class="absolute inset-0 z-0"
       :options="particlesConfig"
     />
-    <section id="home" class="h-screen flex flex-col justify-center px-6 max-w-6xl mx-auto pt-16">
-      <div class="space-y-4 animate-fade-in-up">
-        <h1 class="text-5xl md:text-7xl font-bold text-white tracking-tight">
-          {{ profile.name }}
-        </h1>
-        <p class="text-xl md:text-2xl text-gray-400">
-          I'm a passionate <span class="text-green-500 font-bold border-b-2 border-green-500">AI/Data Engineer</span>
-        </p>
+
+    <div class="relative z-10">
         
-      </div>
-    </section>
-
-    <section id="about" class="py-24 px-6 bg-gray-900">
-      <div class="max-w-6xl mx-auto">
-        <div class="flex items-center gap-2 mb-12">
-            <div class="h-1 w-10 bg-green-500"></div>
-            <h2 class="text-sm font-bold tracking-widest text-green-500 uppercase">About Me</h2>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-          <div>
-             <img 
-                v-if="profile.image" 
-                :src="profile.image" 
-                alt="Profile" 
-                class="w-full h-[500px] object-cover rounded-lg grayscale hover:grayscale-0 transition duration-500 shadow-2xl"
-              >
-              <div v-else class="w-full h-[500px] bg-gray-800 rounded-lg animate-pulse"></div>
-          </div>
-
-          <div>
-            <h3 class="text-3xl font-bold text-white mb-6">Learn more about me</h3>
-            <p class="text-gray-400 leading-relaxed mb-6 whitespace-pre-line">
-              {{ profile.description }}
+        <Navbar />
+        
+        <section id="home" class="h-screen flex flex-col justify-center px-6 max-w-6xl mx-auto pt-16 bg-transparent">
+          <div class="space-y-4 animate-fade-in-up">
+            <h1 class="text-5xl md:text-7xl font-bold text-white tracking-tight">
+              {{ profile.name }}
+            </h1>
+            <p class="text-xl md:text-2xl text-gray-400">
+              I'm a passionate <span class="text-green-500 font-bold border-b-2 border-green-500">AI/Data Engineer</span>
             </p>
-            
-            <ul class="space-y-2 text-gray-300 mb-8">
-                <li class="flex items-center gap-2"><span class="text-green-500">▹</span> Natural Language Processing</li>
-                <li class="flex items-center gap-2"><span class="text-green-500">▹</span> Computer Vision</li>
-                <li class="flex items-center gap-2"><span class="text-green-500">▹</span> Large Language Model</li>
-            </ul>
           </div>
-        </div>
+        </section>
 
-        <div class="mt-20">
-            <div class="flex items-center gap-2 mb-8">
+        <section id="about" class="py-24 px-6 bg-gray-900/80 backdrop-blur-sm">
+          <div class="max-w-6xl mx-auto">
+            <div class="flex items-center gap-2 mb-12">
                 <div class="h-1 w-10 bg-green-500"></div>
-                <h2 class="text-sm font-bold tracking-widest text-green-500 uppercase">My Skills</h2>
+                <h2 class="text-sm font-bold tracking-widest text-green-500 uppercase">About Me</h2>
             </div>
-            
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <div v-for="item in skills" :key="item._id" 
-                     class="bg-gray-800 border border-gray-700 p-4 rounded hover:border-green-500 transition cursor-default text-center">
-                    <span class="font-bold text-gray-200">{{ item.name }}</span>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+              <div>
+                 <img 
+                    v-if="profile.image" 
+                    :src="profile.image" 
+                    alt="Profile" 
+                    class="w-full h-[500px] object-cover rounded-lg grayscale hover:grayscale-0 transition duration-500 shadow-2xl"
+                  >
+                  <div v-else class="w-full h-[500px] bg-gray-800 rounded-lg animate-pulse"></div>
+              </div>
+
+              <div>
+                <h3 class="text-3xl font-bold text-white mb-6">Learn more about me</h3>
+                <p class="text-gray-400 leading-relaxed mb-6 whitespace-pre-line">
+                  {{ profile.description }}
+                </p>
+                
+                <ul class="space-y-2 text-gray-300 mb-8">
+                    <li class="flex items-center gap-2"><span class="text-green-500">▹</span> Natural Language Processing</li>
+                    <li class="flex items-center gap-2"><span class="text-green-500">▹</span> Computer Vision</li>
+                    <li class="flex items-center gap-2"><span class="text-green-500">▹</span> Large Language Model</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="mt-20">
+                <div class="flex items-center gap-2 mb-8">
+                    <div class="h-1 w-10 bg-green-500"></div>
+                    <h2 class="text-sm font-bold tracking-widest text-green-500 uppercase">My Skills</h2>
                 </div>
                 
-                <div v-if="skills.length === 0" class="col-span-4 text-gray-500 text-sm">Loading skills...</div>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div v-for="item in skills" :key="item._id" 
+                         class="bg-gray-800/80 border border-gray-700 p-4 rounded hover:border-green-500 transition cursor-default text-center">
+                        <span class="font-bold text-gray-200">{{ item.name }}</span>
+                    </div>
+                    
+                    <div v-if="skills.length === 0" class="col-span-4 text-gray-500 text-sm">Loading skills...</div>
+                </div>
             </div>
-      </div>
 
-      <div class="mt-20">
-        <div class="flex items-center gap-2 mb-8">
-            <div class="h-1 w-10 bg-green-500"></div>
-            <h2 class="text-sm font-bold tracking-widest text-green-500 uppercase">Certifications</h2>
-        </div>
+            <div class="mt-20">
+                <div class="flex items-center gap-2 mb-8">
+                    <div class="h-1 w-10 bg-green-500"></div>
+                    <h2 class="text-sm font-bold tracking-widest text-green-500 uppercase">Certifications</h2>
+                </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-    <div v-for="cert in certificates" :key="cert._id" class="group relative bg-gray-800 rounded-lg overflow-hidden border border-gray-700 hover:shadow-lg hover:border-green-500 transition duration-300">
-        
-        <div class="absolute top-0 right-0 bg-red-600 text-white text-xs p-1 z-50" v-if="!cert.link">
-            No Link
-        </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div v-for="cert in certificates" :key="cert._id" class="group relative bg-gray-800/90 rounded-lg overflow-hidden border border-gray-700 hover:shadow-lg hover:border-green-500 transition duration-300">
+                        
+                        <div class="absolute top-0 right-0 bg-red-600 text-white text-xs p-1 z-50" v-if="!cert.link">
+                            No Link
+                        </div>
 
-        <a 
-            v-if="cert.link" 
-            :href="cert.link" 
-            target="_blank" 
-            class="absolute inset-0 z-20 cursor-pointer"
-            title="Klik untuk melihat sertifikat"
-        ></a>
+                        <a 
+                            v-if="cert.link" 
+                            :href="cert.link" 
+                            target="_blank" 
+                            class="absolute inset-0 z-20 cursor-pointer"
+                            title="Klik untuk melihat sertifikat"
+                        ></a>
 
-        <div class="h-48 overflow-hidden bg-gray-700 relative">
-            <img :src="cert.image" :alt="cert.title" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
-            
-            <div v-if="cert.link" class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center transition backdrop-blur-sm z-10 pointer-events-none">
-                <span class="text-white font-bold border-2 border-green-500 bg-green-500/20 px-4 py-2 rounded-full text-sm flex items-center gap-2">
-                    Buka Sertifikat ↗
-                </span>
-            </div>
-        </div>
+                        <div class="h-48 overflow-hidden bg-gray-700 relative">
+                            <img :src="cert.image" :alt="cert.title" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                            
+                            <div v-if="cert.link" class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center transition backdrop-blur-sm z-10 pointer-events-none">
+                                <span class="text-white font-bold border-2 border-green-500 bg-green-500/20 px-4 py-2 rounded-full text-sm flex items-center gap-2">
+                                    Buka Sertifikat ↗
+                                </span>
+                            </div>
+                        </div>
+                        
         
         <div class="p-5">
             <h3 class="font-bold text-white text-lg mb-1 leading-tight group-hover:text-green-400 transition">{{ cert.title }}</h3>
@@ -318,6 +363,7 @@ onMounted(() => {
     </div>
 </section>
 
+    </div>
   </div>
 </template>
 
@@ -352,85 +398,5 @@ html {
 .custom-scroll {
   scrollbar-width: thin;
   scrollbar-color: #374151 transparent;
-}
-</style>
-<script setup>
-// Config Partikel "Neural Network"
-const particlesConfig = {
-  background: {
-    color: { value: "#111827" }, // Warna bg-gray-900
-  },
-  fpsLimit: 120,
-  interactivity: {
-    events: {
-      onClick: { enable: true, mode: "push" },
-      onHover: { enable: true, mode: "grab" }, // Efek jaring laba-laba saat di-hover
-      resize: true,
-    },
-    modes: {
-      grab: { distance: 140, links: { opacity: 1 } },
-      push: { quantity: 4 },
-    },
-  },
-  particles: {
-    color: { value: "#10B981" }, // Warna titik (Hijau Green-500)
-    links: {
-      color: "#10B981", // Warna garis penghubung
-      distance: 150,
-      enable: true,
-      opacity: 0.3,
-      width: 1,
-    },
-    move: {
-      direction: "none",
-      enable: true,
-      outModes: { default: "bounce" },
-      random: false,
-      speed: 1.5, // Kecepatan gerak
-      straight: false,
-    },
-    number: {
-      density: { enable: true, area: 800 },
-      value: 80, // Jumlah partikel
-    },
-    opacity: { value: 0.5 },
-    shape: { type: "circle" },
-    size: { value: { min: 1, max: 3 } },
-  },
-  detectRetina: true,
-};
-</script>
-🎨 Opsi 2: Animated Gradient (Tanpa Install Library)
-Kalau tidak mau install library berat, kita bisa buat efek warna bergerak "Aurora" pakai CSS saja. Ini terlihat modern dan clean.
-
-Cara Pasang:
-Langsung di HomeView.vue atau App.vue:
-
-HTML
-
-<template>
-  <div class="min-h-screen text-white bg-gradient-to-br from-gray-900 via-green-900 to-black animate-gradient background-size-400">
-      
-      <div class="container mx-auto px-6 py-20">
-          <h1>Gede Pradnyananda</h1>
-      </div>
-
-  </div>
-</template>
-
-<style>
-/* Animasi background gerak */
-@keyframes gradient {
-	0% { background-position: 0% 50%; }
-	50% { background-position: 100% 50%; }
-	100% { background-position: 0% 50%; }
-}
-
-.animate-gradient {
-	animation: gradient 15s ease infinite;
-}
-
-.background-size-400 {
-    background-size: 400% 400%;
 }
 </style>
